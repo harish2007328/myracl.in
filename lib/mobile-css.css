@@ -1,0 +1,261 @@
+/* Mobile-First CSS Optimizations */
+/* Add these to app/globals.css */
+
+/* 1. Touch-friendly base styles */
+@media (max-width: 640px) {
+  html {
+    font-size: 16px; /* Prevent iOS zoom on inputs */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: rgba(0, 57, 200, 0.1);
+    touch-action: manipulation;
+  }
+
+  /* Ensure form inputs don't trigger zoom */
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 16px;
+  }
+
+  /* Remove default button styles */
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  /* Mobile-optimized links */
+  a {
+    -webkit-touch-callout: none;
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Prevent text selection on long press */
+  a,
+  button,
+  [role="button"] {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* 2. Responsive images */
+@media (max-width: 640px) {
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  picture {
+    display: block;
+    width: 100%;
+  }
+
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Prevent image overflow */
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+    display: block;
+  }
+}
+
+/* 3. Mobile-friendly spacing */
+@media (max-width: 640px) {
+  section {
+    padding: 1rem;
+  }
+
+  /* Ensure proper spacing on small screens */
+  section:nth-child(n) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* 4. Safe area support for notched devices */
+@media (orientation: portrait) and (max-height: 700px) {
+  body {
+    padding-top: max(env(safe-area-inset-top), 1rem);
+    padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+  }
+}
+
+/* 5. Landscape mode adjustments */
+@media (orientation: landscape) and (max-height: 500px) {
+  section {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  h1,
+  h2 {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+}
+
+/* 6. High-DPI screens (retina) */
+@media (-webkit-min-device-pixel-ratio: 2),
+       (min-resolution: 192dpi) {
+  /* Ensure sharp text */
+  body {
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+
+  /* Reduce border width on high-DPI */
+  border {
+    border-width: 0.5px;
+  }
+}
+
+/* 7. Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 8. Dark mode preferences */
+@media (prefers-color-scheme: dark) {
+  /* Already dark by default */
+}
+
+/* 9. Prevent zoom on input focus (iOS) */
+@media (max-width: 640px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+    padding: 0.75rem;
+  }
+
+  /* Focus styles for accessibility */
+  input:focus,
+  textarea:focus,
+  button:focus {
+    outline: 2px solid #0039c8;
+    outline-offset: 2px;
+  }
+}
+
+/* 10. Flexible containers */
+@media (max-width: 640px) {
+  [class*="container"] {
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* 11. Hide scrollbar on mobile (but keep functionality) */
+@media (max-width: 640px) {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 12. Sticky header safe areas */
+@media (max-width: 640px) {
+  header,
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  /* Account for safe area on notched devices */
+  header {
+    padding-top: max(0.5rem, env(safe-area-inset-top));
+  }
+}
+
+/* 13. Mobile-friendly tables */
+@media (max-width: 640px) {
+  table {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody {
+    display: block;
+  }
+
+  tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #333;
+    padding: 1rem;
+  }
+
+  td {
+    display: block;
+    text-align: right;
+    padding: 0.5rem;
+  }
+
+  td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+  }
+}
+
+/* 14. Optimize modal/dialog for mobile */
+@media (max-width: 640px) {
+  dialog,
+  [role="dialog"] {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 1rem;
+    border-radius: 0;
+  }
+
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* 15. Prevent layout shift with scrollbar */
+html {
+  overflow-y: scroll; /* Always show scrollbar */
+}
+
+@media (max-width: 640px) {
+  html {
+    overflow-y: auto;
+  }
+}

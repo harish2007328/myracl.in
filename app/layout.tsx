@@ -16,6 +16,12 @@ export const metadata: Metadata = {
   description: "myracl. is Tirunelveli's No.1 digital marketing agency and best local SEO company. We provide strategy, high-ROAS ads, web making, and growth loops.",
   keywords: "digital marketing agency in tirunelveli, best seo company in tirunelveli, tirunelveli digital marketing, social media marketing tirunelveli, web development tirunelveli, local seo tirunelveli, marketing company in tirunelveli, myracl",
   authors: [{ name: "myracl." }],
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
   alternates: {
     canonical: "https://myracl.in/",
   },
