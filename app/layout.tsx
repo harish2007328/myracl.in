@@ -109,7 +109,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Preconnect important origins and preload LCP image to reduce LCP */}
+        {/* Favicon + Preconnect important origins and preload LCP image to reduce LCP */}
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
         <link rel="preconnect" href="https://app.cal.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.simpleicons.org" crossOrigin="anonymous" />

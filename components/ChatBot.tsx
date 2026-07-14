@@ -259,21 +259,38 @@ export default function ChatBot() {
               e.preventDefault();
               handleSendMessage(inputValue);
             }}
-            className="border-t-2 border-neutral-900 p-3 bg-white flex gap-2"
+            className="border-t-2 border-neutral-900 p-3 bg-white flex items-center gap-3"
           >
-            <input
-              type="text"
-              placeholder="ASK MYRACL..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              className="flex-grow px-4 py-2.5 rounded-xl border-2 border-neutral-900 font-bold uppercase text-xs outline-none bg-neutral-50 shadow-[inset_2px_2px_5px_rgba(0,0,0,0.06)] focus:bg-white transition-colors placeholder:text-neutral-400"
-            />
+            <div className="relative flex-grow">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400">💬</span>
+              <input
+                type="text"
+                placeholder="Ask Myracl — e.g. 'How do I book?'"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="w-full pl-10 pr-12 py-3 rounded-2xl border-2 border-neutral-900 font-semibold text-sm outline-none bg-neutral-50 shadow-[inset_2px_2px_5px_rgba(0,0,0,0.04)] focus:bg-white transition-colors placeholder:text-neutral-400"
+              />
+              <button
+                type="button"
+                onClick={() => { setInputValue(''); }}
+                aria-label="Clear"
+                title="Clear"
+                className="absolute right-10 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 transition-colors"
+              >
+                ✖
+              </button>
+            </div>
+
             <button
               type="submit"
               disabled={isLoading || !inputValue.trim()}
-              className="px-5 py-2.5 rounded-xl bg-[#0039C8] border-2 border-neutral-900 text-white font-black uppercase text-xs tracking-wider shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] hover:shadow-[3.5px_3.5px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:-translate-y-0 disabled:shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] active:scale-95 transition-all cursor-pointer"
+              aria-label="Send message"
+              className="w-12 h-12 rounded-full bg-[#0039C8] border-2 border-neutral-900 text-white font-black flex items-center justify-center shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] hover:shadow-[3.5px_3.5px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transition-all"
             >
-              Send
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
             </button>
           </form>
 

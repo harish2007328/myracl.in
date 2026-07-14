@@ -649,7 +649,7 @@ export default function Home() {
                       const startIdx = idx;
                       idx += count;
                       return (
-                        <div key={rowIdx} className="flex justify-center items-center gap-8 md:gap-12 lg:gap-14">
+                        <div key={rowIdx} className="flex flex-wrap justify-center items-center gap-6 md:gap-12 lg:gap-14">
                           {rowItems.map((p, itemIdx) => {
                             const overallIdx = startIdx + itemIdx;
                             const itemProgress = overallIdx / platforms.length;
@@ -659,7 +659,7 @@ export default function Home() {
                             return (
                               <div
                                 key={p.name}
-                                className="relative flex flex-col items-center gap-3 cursor-pointer transition-all duration-300 ease-out"
+                                className="relative flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 ease-out min-w-[64px] sm:min-w-[72px]"
                                 onMouseEnter={() => isRevealed && setHoveredPlatformIdx(overallIdx)}
                                 onMouseLeave={() => setHoveredPlatformIdx(null)}
                                 style={{
@@ -682,7 +682,7 @@ export default function Home() {
                                 {renderPlatformIcon(p, isHovered, isRevealed)}
 
                                 <span
-                                  className="font-bold text-[10px] uppercase tracking-widest transition-colors duration-300"
+                                  className="font-bold text-[10px] md:text-[11px] uppercase tracking-widest transition-colors duration-300 text-center max-w-[84px]"
                                   style={{
                                     color: isHovered ? "#0039C8" : isRevealed ? "#404040" : "#D4D4D4",
                                   }}
@@ -698,6 +698,25 @@ export default function Home() {
                   </div>
                 );
               })()}
+
+                {/* Mobile-friendly grid fallback for small screens */}
+                <div className="md:hidden mt-8 px-2">
+                  <div className="grid grid-cols-3 gap-3">
+                    {(() => {
+                      const flat = [
+                        "Meta Ads","Google Ads","Instagram Mktg","Web Dev","SEO","Local SEO","Lead Gen","Landing Pages","WhatsApp Mktg",
+                        "LinkedIn Mktg","YouTube Mktg","Facebook Mktg","Ecom Marketing","Marketplace Ads","Performance Ads","CRO","Analytics",
+                        "Email Marketing","Content Mktg","Brand Strategy","GBP Profile","Remarketing","Reputation Mgt","Automation"
+                      ];
+                      return flat.map((name) => (
+                        <div key={name} className="flex flex-col items-center justify-center gap-2 p-2 bg-neutral-50 rounded-lg border border-neutral-200 text-black text-center text-xs font-bold">
+                          <div className="w-8 h-8 bg-white rounded flex items-center justify-center shadow-sm">🛠️</div>
+                          <span className="truncate">{name}</span>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                </div>
             </div>
           </section>
 
