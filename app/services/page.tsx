@@ -140,13 +140,10 @@ const detailedServices = [
 ];
 
 export default function ServicesPage() {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState<typeof detailedServices[0] | null>(null);
 
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroGridRef = useRef<HTMLDivElement>(null);
-  const hashtagRef = useRef<SVGSVGElement>(null);
-  const arrowRef = useRef<SVGSVGElement>(null);
-  const wavyArrowRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -167,15 +164,7 @@ export default function ServicesPage() {
         heroGridRef.current.style.opacity = `${opacity}`;
       }
 
-      if (hashtagRef.current) {
-        hashtagRef.current.style.transform = `rotate(${14 + scrollY * 0.12}deg)`;
-      }
-      if (arrowRef.current) {
-        arrowRef.current.style.transform = `rotate(${140 - scrollY * 0.08}deg)`;
-      }
-      if (wavyArrowRef.current) {
-        wavyArrowRef.current.style.transform = `rotate(${-30 + scrollY * 0.1}deg)`;
-      }
+      document.documentElement.style.setProperty('--scroll-rotation', `${scrollY * 0.12}deg`);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -186,10 +175,6 @@ export default function ServicesPage() {
       window.removeEventListener("resize", handleScroll);
     };
   }, []);
-
-  const toggleExpand = (id: string) => {
-    setExpandedId((prev) => (prev === id ? null : id));
-  };
 
   return (
     <div className="min-h-screen bg-[#0039C8] text-white flex flex-col font-sans overflow-x-hidden select-none">
@@ -226,8 +211,7 @@ export default function ServicesPage() {
 
           {/* Hashtag Shape */}
           <svg
-            ref={hashtagRef}
-            className="absolute top-0 left-12 md:left-24 w-20 h-24 rotate-[14deg] pointer-events-none select-none hidden md:block transition-transform duration-100 ease-out"
+            className="absolute top-0 left-12 md:left-24 w-20 h-24 rotate-[14deg] pointer-events-none select-none hidden md:block"
             viewBox="0 0 300 315"
             fill="none"
             overflow="visible"
@@ -241,8 +225,7 @@ export default function ServicesPage() {
 
           {/* Arrow Shape */}
           <svg
-            ref={arrowRef}
-            className="absolute top-0 right-12 md:right-24 w-28 h-32 rotate-[140deg] pointer-events-none select-none hidden md:block transition-transform duration-100 ease-out"
+            className="absolute top-0 right-12 md:right-24 w-28 h-32 rotate-[140deg] pointer-events-none select-none hidden md:block"
             viewBox="0 0 240 280"
             fill="none"
             overflow="visible"
@@ -271,7 +254,7 @@ export default function ServicesPage() {
       {/* White Canvas Page Content */}
       <div className="w-full bg-white text-black rounded-t-[40px] overflow-hidden relative z-20 flex flex-col">
         
-        {/* Expandable Grid Section */}
+        {/* Grid Section */}
         <section className="w-full py-20 px-4 md:px-8 bg-neutral-50 border-b-4 border-black">
           <div className="max-w-7xl mx-auto">
             
@@ -283,109 +266,42 @@ export default function ServicesPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {detailedServices.map((service) => {
-                const isExpanded = expandedId === service.id;
-                return (
-                  <div 
-                    key={service.id}
-                    className="bg-white border-2 border-neutral-900 rounded-[24px] p-6 shadow-[4px_4px_0px_rgba(0,0,0,1)] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,1)]"
-                  >
-                    <div className="flex flex-col gap-4">
-                      {/* Card Header */}
-                      <div className="flex items-center justify-between border-b-2 border-neutral-100 pb-3">
-                        <span className="font-mono text-sm font-black text-[#0039C8]">
-                          {service.num}
-                        </span>
-                        <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest bg-neutral-100 px-2.5 py-1 rounded-md border border-neutral-200">
-                          {service.tagline}
-                        </span>
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="font-black text-2xl uppercase tracking-tight">
-                        {service.title}
-                      </h3>
-
-                      {/* Description */}
-                      <p className="font-semibold text-xs text-neutral-500 leading-relaxed">
-                        {service.description}
-                      </p>
-
-                      {/* Expanded Content with Grid-style Details */}
-                      {isExpanded && (
-                        <div className="mt-4 pt-4 border-t-2 border-dashed border-neutral-200 flex flex-col gap-4 animate-in fade-in slide-in-from-top-4 duration-200">
-                          {/* Scope & Deliverables columns */}
-                          <div className="grid grid-cols-1 gap-4">
-                            <div>
-                              <span className="block font-black text-[10px] uppercase tracking-wider text-[#0039C8] mb-1.5">• Scope</span>
-                              <ul className="space-y-1">
-                                {service.scope.map((item, idx) => (
-                                  <li key={idx} className="flex items-center gap-2 font-semibold text-neutral-600 text-[11px]">
-                                    <span className="w-1.5 h-1.5 bg-[#AEFF02] border border-black rounded-full shrink-0" />
-                                    {item}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                            <div>
-                              <span className="block font-black text-[10px] uppercase tracking-wider text-[#0039C8] mb-1.5">• Deliverables</span>
-                              <ul className="space-y-1">
-                                {service.deliverables.map((item, idx) => (
-                                  <li key={idx} className="flex items-center gap-2 font-semibold text-neutral-600 text-[11px]">
-                                    <span className="text-[#0039C8] font-bold">✓</span>
-                                    {item}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-
-                          {/* Methodology Process */}
-                          <div>
-                            <span className="block font-black text-[10px] uppercase tracking-wider text-[#0039C8] mb-2">• Process</span>
-                            <div className="space-y-2">
-                              {service.process.map((step, idx) => (
-                                <div key={idx} className="bg-neutral-50 border border-neutral-200 p-2.5 rounded-xl flex flex-col gap-0.5">
-                                  <span className="font-black text-[9px] text-[#0039C8] uppercase tracking-widest">
-                                    {step.step}
-                                  </span>
-                                  <p className="font-semibold text-[10px] text-neutral-500 leading-normal">
-                                    {step.detail}
-                                  </p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Tech stack */}
-                          <div>
-                            <span className="block font-black text-[10px] uppercase tracking-wider text-neutral-400 mb-1.5">• Tools</span>
-                            <div className="flex flex-wrap gap-1.5">
-                              {service.techStack.map((tech, idx) => (
-                                <span key={idx} className="font-mono text-[9px] font-bold uppercase bg-black text-[#AEFF02] px-2 py-0.5 rounded-md">
-                                  {tech}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      )}
+              {detailedServices.map((service) => (
+                <div 
+                  key={service.id}
+                  className="bg-white border-2 border-neutral-900 rounded-[24px] p-6 shadow-[4px_4px_0px_rgba(0,0,0,1)] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,1)]"
+                >
+                  <div className="flex flex-col gap-4">
+                    {/* Card Header */}
+                    <div className="flex items-center justify-between border-b-2 border-neutral-100 pb-3">
+                      <span className="font-mono text-sm font-black text-[#0039C8]">
+                        {service.num}
+                      </span>
+                      <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest bg-neutral-100 px-2.5 py-1 rounded-md border border-neutral-200">
+                        {service.tagline}
+                      </span>
                     </div>
 
-                    {/* Toggle Button */}
-                    <button 
-                      onClick={() => toggleExpand(service.id)}
-                      className={`w-full mt-6 py-2.5 rounded-xl border-2 border-neutral-900 font-black uppercase text-[10px] tracking-wider transition-all duration-200 shadow-[2px_2px_0px_rgba(0,0,0,1)] active:scale-95 cursor-pointer ${
-                        isExpanded 
-                          ? "bg-white text-black hover:bg-neutral-50" 
-                          : "bg-[#AEFF02] text-black hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_rgba(0,0,0,1)]"
-                      }`}
-                    >
-                      {isExpanded ? "Collapse Details -" : "Explore Details +"}
-                    </button>
+                    {/* Title */}
+                    <h3 className="font-black text-2xl uppercase tracking-tight">
+                      {service.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="font-semibold text-xs text-neutral-500 leading-relaxed">
+                      {service.description}
+                    </p>
                   </div>
-                );
-              })}
+
+                  {/* Trigger Details Popup Modal */}
+                  <button 
+                    onClick={() => setSelectedService(service)}
+                    className="w-full mt-6 py-2.5 rounded-xl border-2 border-neutral-900 font-black uppercase text-[10px] tracking-wider transition-all duration-200 shadow-[2px_2px_0px_rgba(0,0,0,1)] active:scale-95 cursor-pointer bg-[#AEFF02] text-black hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_rgba(0,0,0,1)]"
+                  >
+                    Explore Details +
+                  </button>
+                </div>
+              ))}
             </div>
 
           </div>
@@ -410,6 +326,124 @@ export default function ServicesPage() {
         </section>
 
       </div>
+
+      {/* Detailed Modal Popup Overlay */}
+      {selectedService && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+          
+          {/* Faded Background Overlay with Backdrop Blur */}
+          <div 
+            onClick={() => setSelectedService(null)}
+            className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-300"
+          />
+
+          {/* Modal Container */}
+          <div className="relative w-full max-w-2xl bg-white border-4 border-black rounded-[32px] p-6 md:p-8 shadow-[8px_8px_0px_rgba(0,0,0,1)] z-10 flex flex-col gap-6 animate-in zoom-in-95 duration-200 text-black">
+            
+            {/* Modal Header */}
+            <div className="flex items-start justify-between border-b-2 border-neutral-100 pb-4">
+              <div className="flex flex-col gap-1">
+                <span className="font-mono text-xs font-black text-[#0039C8] uppercase tracking-widest bg-blue-50 px-2.5 py-1 rounded-md border border-neutral-200 self-start">
+                  {selectedService.num} • {selectedService.tagline}
+                </span>
+                <h3 className="font-black text-2xl md:text-3xl uppercase tracking-tight text-neutral-900 mt-2">
+                  {selectedService.title}
+                </h3>
+              </div>
+              
+              <button 
+                onClick={() => setSelectedService(null)}
+                className="w-10 h-10 rounded-xl bg-neutral-100 border-2 border-neutral-900 flex items-center justify-center font-black text-neutral-900 shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_rgba(0,0,0,1)] active:scale-95 transition-all cursor-pointer shrink-0"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body with internal scroll prevention for Lenis */}
+            <div className="flex flex-col gap-6 overflow-y-auto max-h-[60vh] pr-2 scrollbar-thin" data-lenis-prevent>
+              {/* Main Description */}
+              <p className="font-semibold text-sm text-neutral-600 leading-relaxed bg-neutral-50 p-4 rounded-2xl border-2 border-neutral-900 shadow-[inset_2px_2px_0px_rgba(0,0,0,0.03)]">
+                {selectedService.description}
+              </p>
+
+              {/* Grid for Scope and Deliverables */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="bg-neutral-50 border-2 border-neutral-900 p-5 rounded-[24px] shadow-[3px_3px_0px_rgba(0,0,0,1)]">
+                  <span className="block font-black text-[11px] uppercase tracking-wider text-[#0039C8] mb-3">• Scope of work</span>
+                  <ul className="space-y-2">
+                    {selectedService.scope.map((item, idx) => (
+                      <li key={idx} className="flex items-center gap-2 font-bold text-neutral-700 text-xs">
+                        <span className="w-2 h-2 bg-[#AEFF02] border-2 border-black rounded-full shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-neutral-50 border-2 border-neutral-900 p-5 rounded-[24px] shadow-[3px_3px_0px_rgba(0,0,0,1)]">
+                  <span className="block font-black text-[11px] uppercase tracking-wider text-[#0039C8] mb-3">• Deliverables</span>
+                  <ul className="space-y-2">
+                    {selectedService.deliverables.map((item, idx) => (
+                      <li key={idx} className="flex items-center gap-2 font-bold text-neutral-700 text-xs">
+                        <span className="text-[#0039C8] font-extrabold text-sm">✓</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Process Timeline */}
+              <div className="flex flex-col gap-3">
+                <span className="font-black text-[11px] uppercase tracking-wider text-[#0039C8]">• Execution process</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {selectedService.process.map((step, idx) => (
+                    <div key={idx} className="bg-neutral-50 border-2 border-neutral-900 p-4 rounded-2xl flex flex-col gap-1 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                      <span className="font-black text-[10px] text-[#0039C8] uppercase tracking-wider">
+                        {step.step}
+                      </span>
+                      <p className="font-semibold text-[11px] text-neutral-500 leading-normal">
+                        {step.detail}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Stack Tools */}
+              <div className="flex flex-col gap-2">
+                <span className="font-black text-[10px] uppercase tracking-wider text-neutral-400">• Technology & tools</span>
+                <div className="flex flex-wrap gap-2">
+                  {selectedService.techStack.map((tech, idx) => (
+                    <span key={idx} className="font-mono text-xs font-black uppercase bg-black text-[#AEFF02] px-3.5 py-1 rounded-lg border-2 border-black">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer CTA */}
+            <div className="border-t-2 border-neutral-100 pt-4 flex items-center justify-between">
+              <button 
+                onClick={() => setSelectedService(null)}
+                className="px-6 py-3 rounded-xl border-2 border-neutral-900 text-black font-black uppercase text-xs tracking-wider shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_rgba(0,0,0,1)] active:scale-95 transition-all cursor-pointer bg-white"
+              >
+                Close Details
+              </button>
+              
+              <Link 
+                href="/#contact"
+                onClick={() => setSelectedService(null)}
+                className="px-6 py-3 rounded-xl bg-[#AEFF02] border-2 border-neutral-900 text-black font-black uppercase text-xs tracking-wider shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] hover:-translate-y-[1.5px] hover:shadow-[3.5px_3.5px_0px_rgba(0,0,0,1)] active:scale-95 transition-all cursor-pointer"
+              >
+                Book roadmap call →
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }

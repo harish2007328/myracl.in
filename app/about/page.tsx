@@ -172,15 +172,18 @@ export default function AboutPage() {
           </svg>
 
           {/* Headline */}
-          <h1 className="font-black text-[clamp(36px,6vw,72px)] leading-[1.02] tracking-tighter uppercase text-white max-w-4xl">
-            Get To Know Our
+          <h1 className="font-black text-[clamp(32px,5vw,64px)] leading-[1.02] tracking-tighter uppercase text-white max-w-4xl">
+            A Growth Partner Founded in 2026
           </h1>
 
           {/* Rotated Badge Row */}
-          <div className="inline-flex items-center gap-3 mt-3">
-            <span className="bg-[#AEFF02] text-[#0039C8] font-black text-[clamp(36px,6vw,72px)] leading-none tracking-tighter uppercase px-5 py-1.5 rounded-xl -rotate-2 select-none border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)]">
-              Story.
+          <div className="inline-flex flex-col items-center gap-4 mt-3">
+            <span className="bg-[#AEFF02] text-[#0039C8] font-black text-[clamp(32px,5vw,64px)] leading-none tracking-tighter uppercase px-5 py-1.5 rounded-xl -rotate-2 select-none border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+              2 Months In.
             </span>
+            <p className="font-bold text-xs md:text-sm text-[#AEFF02] uppercase tracking-[0.15em] max-w-2xl mt-2">
+              Not just a marketing agency. We refine every single detail to boost your business.
+            </p>
           </div>
         </div>
       </section>

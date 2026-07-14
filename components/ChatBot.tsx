@@ -18,6 +18,7 @@ export default function ChatBot() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Auto scroll to bottom
   const scrollToBottom = () => {
@@ -29,6 +30,21 @@ export default function ChatBot() {
       scrollToBottom();
     }
   }, [messages, isOpen]);
+
+  // Click outside to close chatbot
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleSendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return;
@@ -85,8 +101,55 @@ export default function ChatBot() {
     }
   };
 
+  // Render markdown with custom tags rather than raw text
+  const renderMessageContent = (content: string, role: "user" | "assistant") => {
+    const lines = content.split("\n");
+    return lines.map((line, idx) => {
+      let isBullet = false;
+      let cleanLine = line;
+      if (line.trim().startsWith("- ") || line.trim().startsWith("* ")) {
+        isBullet = true;
+        cleanLine = line.trim().replace(/^[-*]\s+/, "");
+      }
+
+      // Parse **bold** tags
+      const parts = [];
+      let lastIndex = 0;
+      const regex = /\*\*(.*?)\*\*/g;
+      let match;
+      while ((match = regex.exec(cleanLine)) !== null) {
+        const matchIndex = match.index;
+        if (matchIndex > lastIndex) {
+          parts.push(cleanLine.substring(lastIndex, matchIndex));
+        }
+        parts.push(
+          <strong 
+            key={matchIndex} 
+            className={role === "user" ? "font-black text-[#AEFF02]" : "font-black text-[#0039C8]"}
+          >
+            {match[1]}
+          </strong>
+        );
+        lastIndex = regex.lastIndex;
+      }
+      if (lastIndex < cleanLine.length) {
+        parts.push(cleanLine.substring(lastIndex));
+      }
+
+      if (isBullet) {
+        return (
+          <div key={idx} className="flex items-start gap-2 my-1 pl-2">
+            <span className={role === "user" ? "text-[#AEFF02] font-black" : "text-[#0039C8] font-black"}>•</span>
+            <span className="font-semibold">{parts}</span>
+          </div>
+        );
+      }
+      return <p key={idx} className="my-0.5 font-semibold">{parts}</p>;
+    });
+  };
+
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end select-none">
+    <div ref={containerRef} className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end select-none">
       
       {/* Floating Chat Icon */}
       {!isOpen && (
@@ -129,8 +192,11 @@ export default function ChatBot() {
             </button>
           </div>
 
-          {/* Messages Area */}
-          <div className="flex-grow p-4 overflow-y-auto bg-neutral-100 flex flex-col gap-4 scrollbar-thin shadow-[inset_0px_4px_10px_rgba(0,0,0,0.08)]">
+          {/* Messages Area - data-lenis-prevent added to permit internal scrolling */}
+          <div 
+            data-lenis-prevent
+            className="flex-grow p-4 overflow-y-auto bg-neutral-100 flex flex-col gap-4 scrollbar-thin shadow-[inset_0px_4px_10px_rgba(0,0,0,0.08)]"
+          >
             {messages.map((msg, i) => (
               <div
                 key={i}
@@ -145,7 +211,9 @@ export default function ChatBot() {
                       : "bg-white text-black rounded-bl-none"
                   }`}
                 >
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
+                  <div className="whitespace-pre-wrap">
+                    {renderMessageContent(msg.content, msg.role)}
+                  </div>
                 </div>
               </div>
             ))}
