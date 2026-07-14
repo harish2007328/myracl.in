@@ -40,6 +40,9 @@ export const metadata: Metadata = {
     description: "myracl. is Tirunelveli's No.1 digital marketing agency and best local SEO company. We provide brand strategy, performance ads, and web making.",
     images: ["https://myracl.in/google-profile.svg"],
   },
+  verification: {
+    google: "kLpL2WHdl97d0zYub2M0O5JCKYLEpwZ91KKNQDatG9o",
+  },
 };
 
 export default function RootLayout({
