@@ -1,4 +1,15 @@
-# SEO & Indexing Rules
+import { NextResponse } from 'next/server'
+
+/**
+ * Dynamic robots.txt endpoint
+ * GET /api/robots
+ *
+ * This generates robots.txt dynamically from configuration
+ * Useful for A/B testing different crawling strategies
+ */
+
+export async function GET() {
+  const robotsTxt = `# SEO & Indexing Rules
 User-agent: *
 Allow: /
 Disallow: /api/
@@ -52,8 +63,16 @@ Allow: /
 
 # Sitemap location
 Sitemap: https://myracl.in/sitemap.xml
-Sitemap: https://myracl.in/sitemap-index.xml
 
 # Request rate
 Request-rate: 1/1s
 Visit-time: 0000-0600
+`
+
+  return new NextResponse(robotsTxt, {
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'public, max-age=604800, s-maxage=604800',
+    },
+  })
+}
