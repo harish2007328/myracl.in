@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0039C8;
+  --foreground: #ffffff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --color-brand-blue: #0039C8;
+  --color-brand-green: #AEFF02;
+  --color-brand-white: #ffffff;
+  --color-brand-black: #000000;
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  min-height: 100vh;
 }
+
+@keyframes scrollLogos {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (min-width: 768px) {
+  *, *::before, *::after,
+  a, button, select, input, textarea, [role="button"], iframe, .cursor-pointer {
+    cursor: none !important;
+  }
+}
+
+/* Hide scrollbars for the calendar container and iframe */
+#my-cal-inline-15min {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+#my-cal-inline-15min::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+}
+#my-cal-inline-15min iframe {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+#my-cal-inline-15min iframe::-webkit-scrollbar {
+  display: none !important;
+}
+
+.scroll-rotate {
+  transform: rotate(var(--scroll-rotation, 0deg)) !important;
+  transform-origin: center !important;
+  will-change: transform;
+}
+
+
