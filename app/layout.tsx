@@ -109,6 +109,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Preconnect important origins and preload LCP image to reduce LCP */}
+        <link rel="preconnect" href="https://app.cal.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.simpleicons.org" crossOrigin="anonymous" />
+        <link rel="preload" as="image" href="/xurya.png" fetchPriority="high" />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
