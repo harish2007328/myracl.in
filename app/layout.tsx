@@ -12,24 +12,33 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "myracl. | Creative Digital Marketing Agency",
-  description: "Elevate your brand with myracl. — a creative digital marketing agency delivering strategy, design, and growth that converts.",
-  keywords: "digital marketing agency, creative agency, brand strategy, SEO, social media marketing, myracl",
+  title: "myracl. | Tirunelveli's No.1 Digital Marketing Agency",
+  description: "myracl. is Tirunelveli's No.1 digital marketing agency and best local SEO company. We provide strategy, high-ROAS ads, web making, and growth loops.",
+  keywords: "digital marketing agency in tirunelveli, best seo company in tirunelveli, tirunelveli digital marketing, social media marketing tirunelveli, web development tirunelveli, local seo tirunelveli, marketing company in tirunelveli, myracl",
   authors: [{ name: "myracl." }],
   alternates: {
     canonical: "https://myracl.in/",
   },
   openGraph: {
     type: "website",
-    title: "myracl. | Creative Digital Marketing Agency",
-    description: "Elevate your brand with myracl. — creative digital marketing that converts.",
+    title: "myracl. | Tirunelveli's No.1 Digital Marketing Agency",
+    description: "myracl. is Tirunelveli's No.1 digital marketing agency and best local SEO company. We provide brand strategy, performance ads, and web making.",
     url: "https://myracl.in/",
     siteName: "myracl.",
+    images: [
+      {
+        url: "https://myracl.in/google-profile.svg",
+        width: 512,
+        height: 512,
+        alt: "myracl. Digital Marketing Logo",
+      }
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "myracl. | Creative Digital Marketing Agency",
-    description: "Elevate your brand with myracl. — creative digital marketing that converts.",
+    title: "myracl. | Tirunelveli's No.1 Digital Marketing Agency",
+    description: "myracl. is Tirunelveli's No.1 digital marketing agency and best local SEO company. We provide brand strategy, performance ads, and web making.",
+    images: ["https://myracl.in/google-profile.svg"],
   },
 };
 
@@ -41,13 +50,47 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "MarketingAgency",
+    "@id": "https://myracl.in/#agency",
     "name": "myracl.",
     "url": "https://myracl.in/",
-    "description": "Creative digital marketing agency helping brands elevate their presence through strategy, design, and growth.",
+    "logo": "https://myracl.in/google-profile.svg",
+    "image": "https://myracl.in/google-profile.svg",
+    "description": "myracl. is Tirunelveli's No.1 digital marketing agency and best local SEO company, specializing in brand strategy, performance ads, video production, web development, and social media growth.",
+    "telephone": "+91-XXXXXXXXXX",
+    "priceRange": "$$",
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Tirunelveli",
+        "sameAs": "https://en.wikipedia.org/wiki/Tirunelveli"
+      },
+      {
+        "@type": "State",
+        "name": "Tamil Nadu",
+        "sameAs": "https://en.wikipedia.org/wiki/Tamil_Nadu"
+      },
+      {
+        "@type": "Country",
+        "name": "India",
+        "sameAs": "https://en.wikipedia.org/wiki/India"
+      }
+    ],
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "Tirunelveli Town",
+      "addressLocality": "Tirunelveli",
+      "addressRegion": "Tamil Nadu",
+      "postalCode": "627006",
       "addressCountry": "IN"
-    }
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 8.7139,
+      "longitude": 77.7567
+    },
+    "sameAs": [
+      "https://github.com/harish2007328"
+    ]
   };
 
   return (

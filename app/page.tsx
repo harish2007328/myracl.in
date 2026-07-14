@@ -292,8 +292,43 @@ export default function Home() {
     };
   }, []);
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Why is myracl. considered Tirunelveli's No.1 digital marketing agency?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "myracl. combines aggressive growth-oriented Brand Strategy, high-ROAS Performance Ads, responsive Next.js Web Development, and local SEO services. We operate as growth partners, aligning our retainers with client business scaling results."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does myracl. provide SEO services in Tirunelveli?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, myracl. provides comprehensive local SEO services in Tirunelveli, Tamil Nadu. We optimize Google Business Profiles (GBP), perform technical speed and heading audits, build content authority, and help local businesses rank on the first page of search results."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the Performance Ads pricing model work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We operate on a custom base retainer combined with a performance revenue share. This ensures that we are directly aligned with your brand's growth and only win when you scale."
+        }
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-[#0039C8] flex flex-col text-white font-sans overflow-x-hidden selection:bg-[#AEFF02] selection:text-black">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       {/* ── Navigation ── */}
       <Navbar />
@@ -389,9 +424,14 @@ export default function Home() {
                 </g>
               </svg>
 
+              {/* Local SEO badge */}
+              <span className="inline-block font-mono text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-[#AEFF02] mb-6 bg-black border-2 border-neutral-900 rounded-lg px-4 py-1.5 shadow-[2px_2px_0px_rgba(0,0,0,1)] select-none">
+                // TIRUNELVELI&apos;S NO.1 DIGITAL MARKETING AGENCY
+              </span>
+
               {/* ── Hero Headline ── */}
               <h1
-                className="font-black text-[clamp(44px,8vw,88px)] leading-[1.02] tracking-[-2px] text-white uppercase max-w-[960px] mx-auto"
+                className="font-black text-[clamp(44px,8vw,88px)] leading-[1.02] tracking-[-2px] text-white uppercase max-w-[960px] mx-auto animate-fade-in"
                 id="hero-heading"
               >
                 Elevate Your<br />

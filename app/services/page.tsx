@@ -237,6 +237,11 @@ export default function ServicesPage() {
             </g>
           </svg>
 
+          {/* Local SEO badge */}
+          <span className="inline-block font-mono text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-[#AEFF02] mb-4 bg-black border-2 border-neutral-900 rounded-lg px-4 py-1.5 shadow-[2px_2px_0px_rgba(0,0,0,1)] select-none">
+            // TIRUNELVELI&apos;S NO.1 DIGITAL MARKETING AGENCY
+          </span>
+
           {/* Headline */}
           <h1 className="font-black text-[clamp(36px,6vw,72px)] leading-[1.02] tracking-tighter uppercase text-white max-w-4xl">
             Core Services Of Our
