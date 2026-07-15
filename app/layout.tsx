@@ -4,6 +4,7 @@ import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import SmoothScroll from "@/components/SmoothScroll";
 import ChatBot from "@/components/ChatBot";
+import CookieConsent from "@/components/CookieConsent";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -127,6 +128,7 @@ export default function RootLayout({
         <SmoothScroll />
         {children}
         <ChatBot />
+        <CookieConsent />
       </body>
     </html>
   );

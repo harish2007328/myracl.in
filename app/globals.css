@@ -24,7 +24,6 @@ html, body {
 
 html {
   scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -39,6 +38,11 @@ body {
   100% { transform: translateX(-50%); }
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 @media (min-width: 768px) {
   *, *::before, *::after,
   a, button, select, input, textarea, [role="button"], iframe, .cursor-pointer {
@@ -48,14 +52,12 @@ body {
 
 /* Hide scrollbars for the calendar container and iframe */
 #my-cal-inline-15min {
-  scrollbar-width: none !important; /* Firefox */
   -ms-overflow-style: none !important; /* IE and Edge */
 }
 #my-cal-inline-15min::-webkit-scrollbar {
   display: none !important; /* Chrome, Safari, Opera */
 }
 #my-cal-inline-15min iframe {
-  scrollbar-width: none !important;
   -ms-overflow-style: none !important;
 }
 #my-cal-inline-15min iframe::-webkit-scrollbar {

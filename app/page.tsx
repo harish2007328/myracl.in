@@ -206,6 +206,7 @@ export default function Home() {
   const platformsContainerRef = useRef<HTMLDivElement>(null);
   const [platformsProgress, setPlatformsProgress] = useState(0);
   const [hoveredPlatformIdx, setHoveredPlatformIdx] = useState<number | null>(null);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
 
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroGridRef = useRef<HTMLDivElement>(null);
@@ -274,7 +275,8 @@ export default function Home() {
     const handleScroll = () => {
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = scrollHeight > 0 ? window.scrollY / scrollHeight : 0;
-      const moveDistance = 3000; // Set a smooth 3,000px translation travel range
+      const vw = window.innerWidth || 1024;
+      const moveDistance = window.innerWidth <= 768 ? Math.round(vw * 1.4) : Math.round(vw * 2.0);
 
       if (marquee1Ref.current) {
         marquee1Ref.current.style.transform = `translateX(${-moveDistance + scrollPercent * moveDistance}px)`;
@@ -323,6 +325,38 @@ export default function Home() {
     ]
   };
 
+  const handleSubscribe = async () => {
+    if (!newsletterEmail.trim()) return;
+    document.cookie = `myracl-user-email=${encodeURIComponent(newsletterEmail)}; path=/; max-age=31536000; SameSite=Lax`;
+    try {
+      // Read existing phone from cookie if it exists to merge
+      const getCookie = (name: string) => {
+        const match = document.cookie.split("; ").find((row) => row.startsWith(`${name}=`));
+        return match ? decodeURIComponent(match.split("=")[1]) : undefined;
+      };
+
+      const phone = getCookie("myracl-user-phone");
+
+      await fetch("/api/track-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          language: navigator.language || "",
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+          referrer: document.referrer || "",
+          screenResolution: `${window.screen.width}x${window.screen.height}`,
+          consentStatus: "accepted",
+          email: newsletterEmail,
+          phone
+        })
+      });
+      alert("THANK YOU FOR SUBSCRIBING!");
+      setNewsletterEmail("");
+    } catch (e) {
+      console.error("Subscription tracking error:", e);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0039C8] flex flex-col text-white font-sans overflow-x-hidden selection:bg-[#AEFF02] selection:text-black">
       <script
@@ -367,7 +401,7 @@ export default function Home() {
               {/* Hashtag */}
               <svg
                 ref={hashtagRef}
-                className="absolute top-0 left-20 md:left-40 w-24 h-28 lg:w-28 lg:h-32 rotate-[14deg] pointer-events-none select-none hidden md:block transition-transform duration-100 ease-out"
+                className="absolute top-4 left-12 md:left-36 w-24 h-28 lg:w-28 lg:h-32 rotate-[14deg] pointer-events-none select-none hidden md:block transition-transform duration-100 ease-out"
                 aria-hidden="true"
                 viewBox="0 0 300 315"
                 fill="none"
@@ -383,7 +417,7 @@ export default function Home() {
               {/* Arrow */}
               <svg
                 ref={arrowRef}
-                className="absolute top-4 right-0 md:right-24 lg:right-32 w-36 h-40 lg:w-44 lg:h-48 rotate-[140deg] pointer-events-none select-none hidden md:block transition-transform duration-100 ease-out"
+                className="absolute top-6 right-0 md:right-24 lg:right-32 w-36 h-40 lg:w-44 lg:h-48 rotate-[140deg] pointer-events-none select-none hidden md:block transition-transform duration-100 ease-out"
                 aria-hidden="true"
                 viewBox="0 0 240 280"
                 fill="none"
@@ -405,7 +439,7 @@ export default function Home() {
               {/* Wavy Long-Tailed Arrow */}
               <svg
                 ref={wavyArrowRef}
-                className="absolute top-36 left-4 md:left-8 lg:left-12 w-48 h-36 lg:w-60 lg:h-44 rotate-[-30deg] pointer-events-none select-none hidden md:block transition-transform duration-100 ease-out"
+                className="absolute top-36 left-6 md:left-12 lg:left-14 w-48 h-36 lg:w-60 lg:h-44 rotate-[-30deg] pointer-events-none select-none hidden md:block transition-transform duration-100 ease-out"
                 aria-hidden="true"
                 viewBox="0 0 320 320"
                 fill="none"
@@ -423,11 +457,6 @@ export default function Home() {
                   />
                 </g>
               </svg>
-
-              {/* Local SEO badge */}
-              <span className="inline-block font-mono text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-[#AEFF02] mb-6 bg-black border-2 border-neutral-900 rounded-lg px-4 py-1.5 shadow-[2px_2px_0px_rgba(0,0,0,1)] select-none">
-                // TIRUNELVELI&apos;S NO.1 DIGITAL MARKETING AGENCY
-              </span>
 
               {/* ── Hero Headline ── */}
               <h1
@@ -469,6 +498,14 @@ export default function Home() {
                 >
                   Selected Works
                 </a>
+              </div>
+
+              {/* Tagline / SEO Subheading */}
+              <div className="mt-8 inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full border border-white/20 backdrop-blur-sm animate-fade-in select-none">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#AEFF02] animate-pulse" />
+                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-[#AEFF02]">
+                  No.1 Digital Marketing Agency in Tirunelveli
+                </span>
               </div>
 
             </div>
@@ -607,7 +644,6 @@ export default function Home() {
                 </h2>
               </div>
 
-              {/* Logo Funnel – Inverted Triangle */}
               {(() => {
                 const platforms = [
                   // Row 1: High demand priority (9 items)
@@ -644,79 +680,77 @@ export default function Home() {
                 let idx = 0;
                 return (
                   <div className="flex flex-col items-center gap-8 md:gap-10">
-                    {rows.map((count, rowIdx) => {
-                      const rowItems = platforms.slice(idx, idx + count);
-                      const startIdx = idx;
-                      idx += count;
-                      return (
-                        <div key={rowIdx} className="flex flex-wrap justify-center items-center gap-6 md:gap-12 lg:gap-14">
-                          {rowItems.map((p, itemIdx) => {
-                            const overallIdx = startIdx + itemIdx;
-                            const itemProgress = overallIdx / platforms.length;
-                            const isRevealed = platformsProgress > itemProgress;
-                            const isHovered = hoveredPlatformIdx === overallIdx;
+                    <div className="w-full md:hidden overflow-x-auto pb-6">
+                      <div className="inline-flex gap-3 px-4">
+                        {platforms.map((p) => (
+                          <div key={p.name} className="flex-shrink-0 min-w-[150px] rounded-3xl border border-slate-200 bg-slate-50 p-3 shadow-sm">
+                            <div className="flex items-center gap-3">
+                              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white border border-slate-200">
+                                {renderPlatformIcon(p, false, true)}
+                              </div>
+                              <span className="font-semibold text-sm text-slate-900">{p.name}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
-                            return (
-                              <div
-                                key={p.name}
-                                className="relative flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 ease-out min-w-[64px] sm:min-w-[72px]"
-                                onMouseEnter={() => isRevealed && setHoveredPlatformIdx(overallIdx)}
-                                onMouseLeave={() => setHoveredPlatformIdx(null)}
-                                style={{
-                                  opacity: isRevealed ? 1 : 0.12,
-                                  transform: isHovered
-                                    ? "scale(1.15) translateY(-3px)"
-                                    : isRevealed
-                                      ? "scale(1)"
-                                      : "scale(0.85)",
-                                }}
-                              >
-                                {/* Tooltip details box */}
-                                {isHovered && (
-                                  <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-48 bg-black text-white text-[10px] md:text-xs font-black uppercase tracking-wider p-3 rounded-xl border-2 border-black shadow-[3px_3px_0px_rgba(0,0,0,1)] text-center z-30 animate-in fade-in slide-in-from-bottom-2 duration-200 pointer-events-none">
-                                    {p.desc}
-                                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-x-8 border-x-transparent border-t-8 border-t-black" />
-                                  </div>
-                                )}
+                    <div className="hidden md:flex flex-col items-center gap-8 md:gap-10">
+                      {rows.map((count, rowIdx) => {
+                        const rowItems = platforms.slice(idx, idx + count);
+                        const startIdx = idx;
+                        idx += count;
+                        return (
+                          <div key={rowIdx} className="flex flex-wrap justify-center items-center gap-6 md:gap-12 lg:gap-14">
+                            {rowItems.map((p, itemIdx) => {
+                              const overallIdx = startIdx + itemIdx;
+                              const itemProgress = overallIdx / platforms.length;
+                              const isRevealed = platformsProgress > itemProgress;
+                              const isHovered = hoveredPlatformIdx === overallIdx;
 
-                                {renderPlatformIcon(p, isHovered, isRevealed)}
-
-                                <span
-                                  className="font-bold text-[10px] md:text-[11px] uppercase tracking-widest transition-colors duration-300 text-center max-w-[84px]"
+                              return (
+                                <div
+                                  key={p.name}
+                                  className="relative flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 ease-out min-w-[64px] sm:min-w-[72px]"
+                                  onMouseEnter={() => isRevealed && setHoveredPlatformIdx(overallIdx)}
+                                  onMouseLeave={() => setHoveredPlatformIdx(null)}
                                   style={{
-                                    color: isHovered ? "#0039C8" : isRevealed ? "#404040" : "#D4D4D4",
+                                    opacity: isRevealed ? 1 : 0.12,
+                                    transform: isHovered
+                                      ? "scale(1.15) translateY(-3px)"
+                                      : isRevealed
+                                        ? "scale(1)"
+                                        : "scale(0.85)",
                                   }}
                                 >
-                                  {p.name}
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      );
-                    })}
+                                  {/* Tooltip details box */}
+                                  {isHovered && (
+                                    <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-48 bg-black text-white text-[10px] md:text-xs font-black uppercase tracking-wider p-3 rounded-xl border-2 border-black shadow-[3px_3px_0px_rgba(0,0,0,1)] text-center z-30 animate-in fade-in slide-in-from-bottom-2 duration-200 pointer-events-none">
+                                      {p.desc}
+                                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-x-8 border-x-transparent border-t-8 border-t-black" />
+                                    </div>
+                                  )}
+
+                                  {renderPlatformIcon(p, isHovered, isRevealed)}
+
+                                  <span
+                                    className="font-bold text-[10px] md:text-[11px] uppercase tracking-widest transition-colors duration-300 text-center max-w-[84px]"
+                                    style={{
+                                      color: isHovered ? "#0039C8" : isRevealed ? "#404040" : "#D4D4D4",
+                                    }}
+                                  >
+                                    {p.name}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 );
               })()}
-
-                {/* Mobile-friendly grid fallback for small screens */}
-                <div className="md:hidden mt-8 px-2">
-                  <div className="grid grid-cols-3 gap-3">
-                    {(() => {
-                      const flat = [
-                        "Meta Ads","Google Ads","Instagram Mktg","Web Dev","SEO","Local SEO","Lead Gen","Landing Pages","WhatsApp Mktg",
-                        "LinkedIn Mktg","YouTube Mktg","Facebook Mktg","Ecom Marketing","Marketplace Ads","Performance Ads","CRO","Analytics",
-                        "Email Marketing","Content Mktg","Brand Strategy","GBP Profile","Remarketing","Reputation Mgt","Automation"
-                      ];
-                      return flat.map((name) => (
-                        <div key={name} className="flex flex-col items-center justify-center gap-2 p-2 bg-neutral-50 rounded-lg border border-neutral-200 text-black text-center text-xs font-bold">
-                          <div className="w-8 h-8 bg-white rounded flex items-center justify-center shadow-sm">🛠️</div>
-                          <span className="truncate">{name}</span>
-                        </div>
-                      ));
-                    })()}
-                  </div>
-                </div>
             </div>
           </section>
 
@@ -1178,9 +1212,14 @@ export default function Home() {
                     <input
                       type="email"
                       placeholder="YOUR EMAIL"
+                      value={newsletterEmail}
+                      onChange={(e) => setNewsletterEmail(e.target.value)}
                       className="w-full bg-transparent text-white font-bold uppercase outline-none placeholder:text-white/30 py-2"
                     />
-                    <button className="text-[#AEFF02] font-black uppercase text-xs tracking-widest pl-4 hover:text-white transition-colors cursor-pointer">
+                    <button 
+                      onClick={handleSubscribe}
+                      className="text-[#AEFF02] font-black uppercase text-xs tracking-widest pl-4 hover:text-white transition-colors cursor-pointer"
+                    >
                       Subscribe
                     </button>
                   </div>
@@ -1208,6 +1247,7 @@ export default function Home() {
                       <li><a href="#about" className="hover:text-[#AEFF02] transition-colors">About Us</a></li>
                       <li><a href="#works" className="hover:text-[#AEFF02] transition-colors">Works</a></li>
                       <li><a href="#testimonials" className="hover:text-[#AEFF02] transition-colors">Feedback</a></li>
+                      <li><a href="/privacy" className="hover:text-[#AEFF02] transition-colors">Privacy Policy</a></li>
                     </ul>
                   </div>
 
@@ -1237,7 +1277,7 @@ export default function Home() {
               <div className="mt-20 border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center font-bold text-xs text-white/40 uppercase tracking-widest gap-6">
                 <p>© 2026 MYRACL. All rights reserved.</p>
                 <div className="flex gap-8 items-center">
-                  <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                  <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
                   <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
 
                   {/* Back to Top */}

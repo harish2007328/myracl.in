@@ -172,7 +172,6 @@
 @media (max-width: 640px) {
   .hide-scrollbar {
     -ms-overflow-style: none;
-    scrollbar-width: none;
   }
 
   .hide-scrollbar::-webkit-scrollbar {
